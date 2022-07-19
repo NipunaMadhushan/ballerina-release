@@ -171,6 +171,9 @@ def build_stdlib_repositories(enable_tests):
                 print(f"Build failed for {module['name']}")
                 sys.exit(1)
             delete_module(module['name'])
+            exit_code = os.system("java dependabot/resources/GarbageCollector.java")
+            if exit_code != 0:
+                sys.exit(1)
 
     # Build ballerina-distribution repo
     os.system("echo Building ballerina-distribution")
