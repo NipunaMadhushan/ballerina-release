@@ -12,7 +12,15 @@
     "build-ignore-modules": ["module-ballerina-constraint", "module-ballerina-serdes"]
   },
   "2201.2.x": {
-    "test-ignore-modules": [],
+    "test-ignore-modules": ["module-ballerina-constraint", "graphql-tools", "module-ballerina-io",
+      "module-ballerina-jballerina.java.arrays", "module-ballerina-observe", "module-ballerina-regex",
+      "module-ballerina-time", "module-ballerina-url", "module-ballerina-xmldata", "module-ballerina-crypto",
+      "module-ballerinai-observe", "module-ballerina-os", "module-ballerina-protobuf", "module-ballerina-random",
+      "module-ballerina-serdes", "module-ballerina-task", "module-ballerina-xslt", "module-ballerina-cache",
+      "module-ballerina-datamapper", "module-ballerina-log", "module-ballerina-uuid", "module-ballerina-auth",
+      "module-ballerina-file", "module-ballerina-ftp", "module-ballerina-jwt", "module-ballerina-mime",
+      "module-ballerina-outh2", "module-ballerina-tcp", "module-ballerina-udp", "module-ballerina-email"
+    ],
     "build-ignore-modules": []
   }
 }

@@ -36,6 +36,15 @@ jobs:
           BALLERINA_REVIEWER_BOT_TOKEN: ${{ secrets.BALLERINA_REVIEWER_BOT_TOKEN }}
           devCentralToken: ${{ secrets.BALLERINA_DEV_CENTRAL_ACCESS_TOKEN }}
 
+      - name: LS
+        run: |
+          ls -a
+
+      - name: LS http
+        run: |
+          ls -a
+        working-directory: ./module-ballerina-http
+
       - name: Set Env Variable
         if: ${{ failure() }}
         id: set-module
