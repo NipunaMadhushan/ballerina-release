@@ -33,19 +33,17 @@ jobs:
       - name: Install Python Packages
         run: |
           pip install requests
-          pip install retry
-          pip install PyGithub
-          pip install cryptography
           pip install httplib2
+          pip install colorama
+          pip install configobj
+          pip install requests
 
       - name: Build Modules
         run: |
-          python dependabot/build_stdlibs_for_lang_updates.py master true ballerina-platform master
+          python dependabot/full_build_script.py ./fbp --update-stdlib-dependencies --continue-on-error --skip-tests
         env:
-          BALLERINA_BOT_USERNAME: ${{ secrets.BALLERINA_BOT_USERNAME }}
-          BALLERINA_BOT_TOKEN: ${{ secrets.BALLERINA_BOT_TOKEN }}
-          BALLERINA_BOT_EMAIL: ${{ secrets.BALLERINA_BOT_EMAIL }}
-          BALLERINA_REVIEWER_BOT_TOKEN: ${{ secrets.BALLERINA_REVIEWER_BOT_TOKEN }}
+          packageUser: ${{ secrets.BALLERINA_BOT_USERNAME }}
+          packagePAT: ${{ secrets.BALLERINA_BOT_TOKEN }}
           devCentralToken: ${{ secrets.BALLERINA_DEV_CENTRAL_ACCESS_TOKEN }}
 
       - name: Notify Build Failure
