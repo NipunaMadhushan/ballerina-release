@@ -214,7 +214,7 @@ def main():
         build_level = args.build_level
 
     if args.test_module:
-        print_info("Building from the module: " + args.test_module)
+        print_info("Test the module: " + args.test_module)
         test_module = args.test_module
         print_warn("'--test-module' flag will override '--up-to-module' & '--from-module' flags. It will skip the " +
                    "tests for dependency modules and dependent modules if '--update-stdlib-dependencies' flag " +
