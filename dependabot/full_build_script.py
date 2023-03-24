@@ -465,7 +465,7 @@ def update_installer_versions(lang_version):
                                        GRADLE_PROPERTIES)
 
     display_text = lang_version.split("-")[0]
-    swan_lake_latest_version = display_text + "-swan-lake"
+    swan_lake_latest_version = "swan-lake-" + display_text
     spec_version = ballerina_lang_configs['specVersion']
     update_tool_version = ballerina_distribution_configs['ballerinaCommandVersion']
 
