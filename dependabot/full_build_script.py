@@ -264,7 +264,7 @@ def main():
                 clone_repository(module_name)
 
                 os.chdir(module_name)
-                process_module(module_name, module_version_key, lang_version, patch_level, use_released_versions, 
+                process_module(module_name, module_version_key, lang_version, patch_level, use_released_versions,
                                update_stdlib_dependencies, keep_local_changes, downstream_branch)
 
                 if not skip_tests and test_module and test_module != module_name:
@@ -298,14 +298,14 @@ def main():
             start_build = True
         else:
             start_build = False
-            
+
     if build_distribution and start_build:
         print_block()
         print_block()
         clone_repository(BALLERINA_DIST_REPO_NAME)
 
         os.chdir(BALLERINA_DIST_REPO_NAME)
-        process_module(BALLERINA_DIST_REPO_NAME, None, lang_version, patch_level, use_released_versions, 
+        process_module(BALLERINA_DIST_REPO_NAME, None, lang_version, patch_level, use_released_versions,
                        update_stdlib_dependencies, keep_local_changes, downstream_branch)
         dist_build_commands = commands.copy()
         dist_build_commands.append("-x")
@@ -319,7 +319,7 @@ def main():
         os.chdir("..")
 
 
-def process_module(module_name, module_version_key, lang_version, patch_level, use_released_versions, 
+def process_module(module_name, module_version_key, lang_version, patch_level, use_released_versions,
                    update_stdlib_dependencies, keep_local_changes, downstream_branch):
     global stdlib_versions
 
@@ -330,7 +330,7 @@ def process_module(module_name, module_version_key, lang_version, patch_level, u
     if downstream_branch:
         module_branch = downstream_branch
         print_info(f"Using given downstream branch {module_branch}")
-    
+
     if module_name != BALLERINA_DIST_REPO_NAME:
         if module_name in downstream_repo_branches:
             module_branch = downstream_repo_branches[module_name]
@@ -342,7 +342,7 @@ def process_module(module_name, module_version_key, lang_version, patch_level, u
     elif patch_level:
         module_branch = patch_level
         print_info(f"Using patch branch {module_branch} for {BALLERINA_DIST_REPO_NAME}")
-        
+
     checkout_branch(module_branch, keep_local_changes)
     print_info("Branch: " + module_branch)
 
@@ -508,7 +508,7 @@ def read_data_for_module_testing(stdlib_modules_data, test_module_name):
         for dependent in dependents:
             module_dependencies[dependent] = module_dependencies.get(dependent, []) + [module_name]
 
-    if not test_module_name in standard_library_data.keys():
+    if test_module_name not in standard_library_data.keys():
         print_error(f"Desired module {test_module_name} for testing was not found in {MODULE_LIST_JSON}")
         exit(1)
 
