@@ -68,10 +68,10 @@ jobs:
           SHORT_VERSION=$((grep -w "version" | cut -d= -f2 | cut -d- -f1) < ballerina-distribution/gradle.properties)
           DIST_VERSION=$((grep -w "version" | cut -d= -f2) < ballerina-distribution/gradle.properties)
           CODE_NAME=$((grep -w 'codeName' | cut -d= -f2) < ballerina-distribution/gradle.properties)
-          RELEASE_VERSION=$DIST_VERSION-$CODE_NAME
+          RELEASE_VERSION=${DIST_VERSION##*( )}-${CODE_NAME##*( )}
           echo "::set-output name=version::$RELEASE_VERSION"
           echo "::set-output name=sversion::$SHORT_VERSION"
-      - name: Archive Ballerina ZIP
+      - name: Echo version
         run: echo ${{ steps.project-version.outputs.version }}
       - name: Archive Ballerina ZIP
         uses: actions/upload-artifact@v2
