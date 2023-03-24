@@ -39,7 +39,7 @@ jobs:
 
       - name: Build Modules
         run: |
-          python -u dependabot/full_build_script.py ./fbp --lang-branch 2201.4.x --patch-level 2201.4.x --use-released-versions --continue-on-error --skip-tests
+          python -u dependabot/full_build_script.py ./ --lang-branch 2201.4.x --patch-level 2201.4.x --use-released-versions --continue-on-error --skip-tests
         env:
           packageUser: ${{ secrets.BALLERINA_BOT_USERNAME }}
           packagePAT: ${{ secrets.BALLERINA_BOT_TOKEN }}
