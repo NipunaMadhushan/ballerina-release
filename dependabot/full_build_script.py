@@ -241,7 +241,9 @@ def main():
     start_build = False if from_module else True
     failed_modules = []
     exit_code = 0
-    for level in stdlib_modules_by_level:
+    module_levels = list(stdlib_modules_by_level.keys())
+    module_levels.sort()
+    for level in module_levels:
         if build_level:
             if int(build_level) == level:
                 start_build = True
