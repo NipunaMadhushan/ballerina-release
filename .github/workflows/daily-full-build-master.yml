@@ -72,6 +72,8 @@ jobs:
           echo "::set-output name=version::$RELEASE_VERSION"
           echo "::set-output name=sversion::$SHORT_VERSION"
       - name: Archive Ballerina ZIP
+        run: echo ${{ steps.project-version.outputs.version }}
+      - name: Archive Ballerina ZIP
         uses: actions/upload-artifact@v2
         with:
           name: Ballerina ZIP
