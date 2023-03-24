@@ -298,6 +298,8 @@ def main():
             start_build = True
         else:
             start_build = False
+    if test_module and test_module != BALLERINA_DIST_REPO_NAME:
+        start_build = False
 
     if build_distribution and start_build:
         print_block()
@@ -310,6 +312,10 @@ def main():
         dist_build_commands = commands.copy()
         dist_build_commands.append("-x")
         dist_build_commands.append(":project-api-tests:test")
+        if not skip_tests and test_module and test_module != BALLERINA_DIST_REPO_NAME:
+            dist_build_commands.append("-x")
+            dist_build_commands.append("test")
+
         return_code = build_module(BALLERINA_DIST_REPO_NAME, dist_build_commands)
         if return_code != 0:
             exit_code = return_code
@@ -515,20 +521,19 @@ def read_data_for_module_testing(stdlib_modules_data, test_module_name):
     module_list = {test_module_name}
     while module_list:
         current_module_name = module_list.pop()
-        if current_module_name != test_module_name:
-            level = standard_library_data[current_module_name]['level']
-            version_key = standard_library_data[current_module_name]['version_key']
-            if level in stdlib_modules_by_level.keys():
-                repeated = False
-                for module in stdlib_modules_by_level[level]:
-                    if module["name"] == current_module_name:
-                        repeated = True
-                        break
-                if not repeated:
-                    stdlib_modules_by_level[level] = stdlib_modules_by_level.get(level, []) + \
-                                                     [{"name": current_module_name, "version_key": version_key}]
-            else:
-                stdlib_modules_by_level[level] = [{"name": current_module_name, "version_key": version_key}]
+        level = standard_library_data[current_module_name]['level']
+        version_key = standard_library_data[current_module_name]['version_key']
+        if level in stdlib_modules_by_level.keys():
+            repeated = False
+            for module in stdlib_modules_by_level[level]:
+                if module["name"] == current_module_name:
+                    repeated = True
+                    break
+            if not repeated:
+                stdlib_modules_by_level[level] = stdlib_modules_by_level.get(level, []) + \
+                                                 [{"name": current_module_name, "version_key": version_key}]
+        else:
+            stdlib_modules_by_level[level] = [{"name": current_module_name, "version_key": version_key}]
 
         if current_module_name in module_dependencies.keys():
             dependencies = set(module_dependencies[current_module_name])
