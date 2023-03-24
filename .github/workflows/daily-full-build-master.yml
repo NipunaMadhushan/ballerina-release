@@ -69,6 +69,11 @@ jobs:
           DIST_VERSION=$((grep -w "version" | cut -d= -f2) < ballerina-distribution/gradle.properties)
           CODE_NAME=$((grep -w 'codeName' | cut -d= -f2) < ballerina-distribution/gradle.properties)
           RELEASE_VERSION=${DIST_VERSION##*( )}-${CODE_NAME##*( )}
+
+          echo $DIST_VERSION
+          echo $CODE_NAME
+          echo $RELEASE_VERSION
+
           echo "::set-output name=version::$RELEASE_VERSION"
           echo "::set-output name=sversion::$SHORT_VERSION"
       - name: Echo version
