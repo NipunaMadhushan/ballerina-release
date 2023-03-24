@@ -13,18 +13,15 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-
       - name: Set up JDK 11
         uses: actions/setup-java@v2
         with:
           distribution: 'temurin'
           java-version: '11'
-
       - name: Setup NodeJs
         uses: actions/setup-node@v3
         with:
           node-version: 10.22.1
-
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
@@ -37,21 +34,18 @@ jobs:
           pip install colorama
           pip install configobj
           pip install requests
-
       - name: Build Modules
         run: |
-          python -u dependabot/full_build_script.py ./ --lang-version 2201.5.0-20230324-130500-5a85c635 --update-stdlib-dependencies --continue-on-error --skip-tests --build-level 10
+          python -u dependabot/full_build_script.py ./ --update-stdlib-dependencies --continue-on-error
         env:
           packageUser: ${{ secrets.BALLERINA_BOT_USERNAME }}
           packagePAT: ${{ secrets.BALLERINA_BOT_TOKEN }}
           devCentralToken: ${{ secrets.BALLERINA_DEV_CENTRAL_ACCESS_TOKEN }}
-
       - name: Notify Build Failure
         if: ${{ failure() }}
         shell: bash
         run:
           FILE="failed_modules.txt"
-
           while read module; do
             python3 dependabot/notify_full_build_failure.py $module master;
           done < ${FILE}
@@ -61,7 +55,6 @@ jobs:
           CHAT_TOKEN: ${{ secrets.NOTIFICATIONS_CHAT_TOKEN }}
           ENV_USER_ENCRYPTION_KEY: ${{secrets.USER_ENCRYPTION_KEY}}
           BALLERINA_BOT_TOKEN: ${{ secrets.BALLERINA_BOT_TOKEN }}
-
       - name: Get project version
         id: project-version
         run: |
@@ -69,15 +62,8 @@ jobs:
           DIST_VERSION=$((grep -w "version" | cut -d= -f2 | xargs) < ballerina-distribution/gradle.properties)
           CODE_NAME=$((grep -w 'codeName' | cut -d= -f2 | xargs) < ballerina-distribution/gradle.properties)
           RELEASE_VERSION=$DIST_VERSION-$CODE_NAME
-
-          echo $DIST_VERSION
-          echo $CODE_NAME
-          echo $RELEASE_VERSION
-
           echo "::set-output name=version::$RELEASE_VERSION"
           echo "::set-output name=sversion::$SHORT_VERSION"
-      - name: Echo version
-        run: echo ${{ steps.project-version.outputs.version }}
       - name: Archive Ballerina ZIP
         uses: actions/upload-artifact@v2
         with:
