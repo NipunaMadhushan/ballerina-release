@@ -3,19 +3,19 @@ name: Module Testing Pipeline
 on:
   workflow_dispatch:
     inputs:
-      ballerina_lang_branch:
-        description: 'Ballerina-lang branch'
+      lang_branch:
+        description: 'ballerina-lang branch'
         required: true
         default: 'master'
-      downstream_repo_branch:
+      downstream_branch:
         description: 'Downstream repository branch'
-        required: true
-        default: 'master'
+        required: false
+        default: ''
       test_module:
-        description: 'Test module e.g., module-ballerina-io'
+        description: 'Test module (e.g., module-ballerina-io)'
         deprecationMessage: 'standard library module needs to be tested'
         required: true
-        default: ''
+        default: 'module-ballerina-io'
 
 jobs:
   module-test-pipeline:
@@ -39,10 +39,10 @@ jobs:
       - name: Install Python Packages
         run: |
           pip install requests
-          pip install retry
-          pip install PyGithub
-          pip install cryptography
           pip install httplib2
+          pip install colorama
+          pip install configobj
+          pip install requests
 
       - name: Set up JDK 11
         uses: actions/setup-java@v2
@@ -56,13 +56,18 @@ jobs:
           node-version: 10.22.1
 
       - name: Build Modules
+        shell: bash
         run: |
-          python dependabot/pipeline_for_module_testing.py ${{ github.event.inputs.ballerina_lang_branch }} true \
-          ${{ github.repository_owner }} ${{ github.event.inputs.downstream_repo_branch }} \
-          ${{ github.event.inputs.test_module }}
+          if (${{ github.event.inputs.downstream_branch != ''}})
+          then
+            python -u dependabot/full_build_script.py ./ --lang-branch ${{ github.event.inputs.lang_branch }} \
+            --update-stdlib-dependencies --test-module ${{ github.event.inputs.test_module }} \
+            --downstream-branch ${{ github.event.inputs.downstream_branch }}
+          else
+            python -u dependabot/full_build_script.py ./ --lang-branch ${{ github.event.inputs.lang_branch }} \
+            --update-stdlib-dependencies --test-module ${{ github.event.inputs.test_module }}
+          fi
         env:
-          BALLERINA_BOT_USERNAME: ${{ secrets.BALLERINA_BOT_USERNAME }}
-          BALLERINA_BOT_TOKEN: ${{ secrets.BALLERINA_BOT_TOKEN }}
-          BALLERINA_BOT_EMAIL: ${{ secrets.BALLERINA_BOT_EMAIL }}
-          BALLERINA_REVIEWER_BOT_TOKEN: ${{ secrets.BALLERINA_REVIEWER_BOT_TOKEN }}
+          packageUser: ${{ secrets.BALLERINA_BOT_USERNAME }}
+          packagePAT: ${{ secrets.BALLERINA_BOT_TOKEN }}
           devCentralToken: ${{ secrets.BALLERINA_DEV_CENTRAL_ACCESS_TOKEN }}
